@@ -46,10 +46,13 @@ app.use(cors({
     origin: [
         "https://task-manager-frontend-alpha-rust.vercel.app"
     ],
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
 }))
+
+// ALLOW PREFLIGHT REQUESTS
+app.options("*", cors())
 
 app.use(express.json())
 
