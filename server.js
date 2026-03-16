@@ -42,22 +42,16 @@ const taskRoutes = require("./routes/taskRoutes")
 
 const app = express()
 
-const corsOptions = {
-    origin: "https://task-manager-frontend-alpha-rust.vercel.app",
-    // function (origin, callback){
-    //     callback(null, true)
-    // },
-    // [
-    //     "https://task-manager-frontend-alpha-rust.vercel.app"
-    // ],
+app.use(cors({
+    origin: [
+        "https://task-manager-frontend-alpha-rust.vercel.app"
+    ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
-}
+}))
 
-// ALLOW PREFLIGHT REQUESTS
-app.use(cors(corsOptions))
-app.options("*", cors(corsOptions))
+// ALLOW PREFLIGHT REQUEST
 
 app.use(express.json())
 
@@ -69,30 +63,13 @@ app.get("/", (req,res) => {
     res.send("Backend API Working")
 })
 
-// mongoose.connect(process.env.MONGO_DB_URL)
-// .then(() => console.log("MongoDb Connected"))
-// .catch(err => console.log(err))
-
-let isConnected = false
- async function connectDB(){
-    if(isConnected) return
-    try {
-        const db = await mongoose.connect(process.env.MONGO_DB_URL)
-        isConnected = db.connections[0].readyState
-        console.log("MongoDB Connected")
-    } catch (err) {
-        console.error("MongoDB Error:", err)
-    }
-    
- }
+mongoose.connect(process.env.MONGO_DB_URL)
+.then(() => console.log("MongoDb Connected"))
+.catch(err => console.log(err))
 
 //Important for Varcel
 
-// module.exports = app
-module.exports = async(req,res) =>{
-    await connectDB()
-    return app(req,res)
-}
+module.exports = app
 
 
 
