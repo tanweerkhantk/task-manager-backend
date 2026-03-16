@@ -68,13 +68,25 @@ app.get("/", (req,res) => {
     res.send("Backend API Working")
 })
 
-mongoose.connect(process.env.MONGO_DB_URL)
-.then(() => console.log("MongoDb Connected"))
-.catch(err => console.log(err))
+// mongoose.connect(process.env.MONGO_DB_URL)
+// .then(() => console.log("MongoDb Connected"))
+// .catch(err => console.log(err))
+
+let isConnected = false
+ async function connectDB(){
+    if(isConnected) return
+    const db = await mongoose.connect(process.env.MONGO_DB_URL)
+    isConnected = db.connections[0].readyState
+    console.log("MongoDB Connected")
+ }
 
 //Important for Varcel
 
-module.exports = app
+// module.exports = app
+module.exports = async(req,res) =>{
+    await connectDB()
+    return app(req,res)
+}
 
 
 
