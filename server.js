@@ -47,6 +47,7 @@ app.use(cors({
         "https://task-manager-frontend-alpha-rust.vercel.app"
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
 }))
 
