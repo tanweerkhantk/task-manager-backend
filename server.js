@@ -42,7 +42,7 @@ const taskRoutes = require("./routes/taskRoutes")
 
 const app = express()
 
-app.use(cors({
+const corsOptions = {
     origin: "https://task-manager-frontend-alpha-rust.vercel.app",
     // function (origin, callback){
     //     callback(null, true)
@@ -53,10 +53,11 @@ app.use(cors({
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
-}))
+}
 
 // ALLOW PREFLIGHT REQUESTS
-app.options("*", cors())
+app.use(cors(corsOptions))
+app.options("*", cors(corsOptions))
 
 app.use(express.json())
 
@@ -75,9 +76,14 @@ app.get("/", (req,res) => {
 let isConnected = false
  async function connectDB(){
     if(isConnected) return
-    const db = await mongoose.connect(process.env.MONGO_DB_URL)
-    isConnected = db.connections[0].readyState
-    console.log("MongoDB Connected")
+    try {
+        const db = await mongoose.connect(process.env.MONGO_DB_URL)
+        isConnected = db.connections[0].readyState
+        console.log("MongoDB Connected")
+    } catch (err) {
+        console.error("MongoDB Error:", err)
+    }
+    
  }
 
 //Important for Varcel
