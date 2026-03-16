@@ -43,7 +43,11 @@ const taskRoutes = require("./routes/taskRoutes")
 const app = express()
 
 app.use(cors({
-    origin: "*"
+    origin: [
+        "https://task-manager-frontend-alpha-rust.vercel.app"
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
 }))
 
 app.use(express.json())
@@ -69,7 +73,7 @@ module.exports = app
 
 
 
-app.listen(process.env.PORT, () => {
-    console.log(`Server is started ${process.env.PORT}`);
+// app.listen(process.env.PORT, () => {
+//     console.log(`Server is started ${process.env.PORT}`);
     
-}) 
+// }) 
