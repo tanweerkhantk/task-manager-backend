@@ -43,9 +43,12 @@ const taskRoutes = require("./routes/taskRoutes")
 const app = express()
 
 app.use(cors({
-    origin: [
-        "https://task-manager-frontend-alpha-rust.vercel.app"
-    ],
+    origin: function (origin, callback){
+        callback(null, true)
+    },
+    // [
+    //     "https://task-manager-frontend-alpha-rust.vercel.app"
+    // ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
